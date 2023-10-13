@@ -1,0 +1,15 @@
+/workspaces/ConsoleChess/bin/Debug/net7.0/ConsoleChess
+/workspaces/ConsoleChess/bin/Debug/net7.0/ConsoleChess.deps.json
+/workspaces/ConsoleChess/bin/Debug/net7.0/ConsoleChess.runtimeconfig.json
+/workspaces/ConsoleChess/bin/Debug/net7.0/ConsoleChess.dll
+/workspaces/ConsoleChess/bin/Debug/net7.0/ConsoleChess.pdb
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.csproj.AssemblyReference.cache
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.AssemblyInfoInputs.cache
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.AssemblyInfo.cs
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.csproj.CoreCompileInputs.cache
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.dll
+/workspaces/ConsoleChess/obj/Debug/net7.0/refint/ConsoleChess.dll
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.pdb
+/workspaces/ConsoleChess/obj/Debug/net7.0/ConsoleChess.genruntimeconfig.cache
+/workspaces/ConsoleChess/obj/Debug/net7.0/ref/ConsoleChess.dll
