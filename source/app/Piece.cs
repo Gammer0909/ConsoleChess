@@ -9,7 +9,7 @@ namespace ConsoleChess.Abstraction;
 /// Represents a chess piece
 /// </summary>
 public class Piece {
-    public static Piece Null => new(PieceType.Null, PieceColor.Null);
+    public static Piece Null => new(PieceType.Null, PieceColor.Null, "", "", false, false, false, null, false);
     private PieceType pieceType { get; set; }
     private PieceColor pieceColor { get; set; }
     public string squareInNotation { get; set; }
@@ -21,13 +21,46 @@ public class Piece {
     private bool isLegalMove = true;
 
     /// <summary>
-    /// Creates a new Piece object from a given PieceType and PieceColor
+    /// Creates a new Piece object by manually setting each property; Shouldn't ever be used.
     /// </summary>
-    /// <param name="pieceType"></param>
-    /// <param name="pieceColor"></param>
-    public Piece(PieceType pieceType, PieceColor pieceColor) {
+    /// <param name="pieceType">The type of piece</param>
+    /// <param name="pieceColor">The color of the piece</param>
+    /// <param name="squareInNotation">The square that the piece is on</param>
+    /// <param name="squareToMoveInNotation">The square that the piece is moving to</param>
+    /// <param name="isCapturing">Is the piece capturing something?</param>
+    /// <param name="isChecking">Is the piece a check?</param>
+    /// <param name="isCheckingMate">Is the piece checkmate?</param>
+    /// <param name="pieceToAttack">The piece that is being attacked. If the piece is not attacking anything, set this to Piece.Null</param>
+    /// <param name="isLegalMove">Is the move legal?</param>
+    public Piece(PieceType pieceType, PieceColor pieceColor, string squareInNotation, string squareToMoveInNotation, bool isCapturing, bool isChecking, bool isCheckingMate, Piece? pieceToAttack, bool isLegalMove) {
         this.pieceType = pieceType;
         this.pieceColor = pieceColor;
+        this.squareInNotation = squareInNotation;
+        this.squareToMoveInNotation = squareToMoveInNotation;
+        this.isCapturing = isCapturing;
+        this.isChecking = isChecking;
+        this.isCheckingMate = isCheckingMate;
+        this.pieceToAttack = pieceToAttack;
+        this.isLegalMove = isLegalMove;
+    }
+
+    /// <summary>
+    /// Creates a new Piece object with just the Piece type, Color, and square specified
+    /// </summary>
+    /// <param name="pieceType">The type of piece</param>
+    /// <param name="pieceColor">The color of the piece</param>
+    /// <param name="squareInNotation">The square that the piece is on</param>
+    public Piece(PieceType pieceType, PieceColor pieceColor, string squareInNotation) {
+        this.pieceType = pieceType;
+        this.pieceColor = pieceColor;
+        this.squareInNotation = squareInNotation;
+        // Set the rest to empty values
+        this.squareToMoveInNotation = "";
+        this.isCapturing = false;
+        this.isChecking = false;
+        this.isCheckingMate = false;
+        this.pieceToAttack = Piece.Null;
+        this.isLegalMove = true;
     }
 
     /// <summary>
@@ -55,32 +88,77 @@ public class Piece {
             _ => throw new ArgumentException("Invalid chess notation")
         };
 
-        if (inputChessNotation.Length == 7) {
-            // Check if the piece is capturing by finding if 'x' is in the input (Eg. Bd4**x**e5+)
-            this.isCapturing = inputChessNotation[4] == 'x';
-            // Check if the piece is checking by finding if '+' is in the input (Eg. Bd4xe5**+**)
-            this.isChecking = inputChessNotation[inputChessNotation.Length - 1] == '+';
-            // Check if the piece is checking mate by finding if '#' is in the input (Eg. Bd4xe5+**#**)
-            this.isCheckingMate = inputChessNotation[inputChessNotation.Length - 1] == '#';
+        for (int i = 0; i < inputChessNotation.Length; i++) {
 
-            // Get the piece to attack by getting the last two characters of the input
-            this.pieceToAttack = board.GetPiece(inputChessNotation[2..4]);
+            // See if the current character is a letter A-H
+            if (inputChessNotation[i] >= 'A' && inputChessNotation[i] <= 'H') {
+                // See if the next character is a number 1-8
+                if (inputChessNotation[i + 1] >= '1' && inputChessNotation[i + 1] <= '8' && squareInNotation == null) {
+                    // If it is, then we have found the square that the piece is on
+                    this.squareInNotation = inputChessNotation.Substring(i, 2);
+                }
+            }
 
-            // Im not sure how to check if it's a legal move so
-            // TODO: Check for legal moves
+            // See if the current character is a letter A-H
+            if (inputChessNotation[i] >= 'A' && inputChessNotation[i] <= 'H') {
+                // See if the next character is a number 1-8
+                if (inputChessNotation[i + 1] >= '1' && inputChessNotation[i + 1] <= '8' && squareToMoveInNotation == null) {
+                    // If it is, then we have found the square that the piece is moving to
+                    this.squareToMoveInNotation = inputChessNotation.Substring(i, 2);
+                }
+            }
 
-            // Get the Piece that this is on
-            this.squareInNotation = inputChessNotation[1..2];
+            if (inputChessNotation[i] == 'x') {
+                this.isCapturing = true;
+            }
+            if (inputChessNotation[i] == '+') {
+                this.isChecking = true;
+            }
+            if (inputChessNotation[i] == '#') {
+                this.isCheckingMate = true;
+            }
+        }
 
-            // Get the Piece that this is moving to
-            this.squareToMoveInNotation = inputChessNotation[5..6];
+        // Just in case, we know the piece's square is guaranteed to @ 1-2
+        if (this.squareInNotation == null) {
+            this.squareInNotation = inputChessNotation.Substring(1, 2);
+        }
 
+        if (this.isCapturing) {
+            // Length is one extra!
+            this.pieceToAttack = board.GetPiece(inputChessNotation.Substring(4, 2));
+            // We can also get the square through the piece we got, provided it's null
+            this.squareToMoveInNotation = this.pieceToAttack.squareInNotation;
+        } else {
+            // Length is normal, so the index starts at 3
+            this.pieceToAttack = Piece.Null;
+            this.squareToMoveInNotation = inputChessNotation.Substring(3, 2);
         }
 
     }
 
     public Piece GetPieceToAttack() {
         return this.pieceToAttack;
+    }
+
+    /// <summary>
+    /// Returns the PieceType of the Piece
+    /// </summary>
+    /// <returns></returns>
+    public PieceType GetPieceType() {
+        return this.pieceType;
+    }
+
+    /// <summary>
+    /// Returns the PieceColor of the Piece
+    /// </summary>
+    /// <returns></returns>
+    public PieceColor GetPieceColor() {
+        return this.pieceColor;
+    }
+
+    public override string ToString() {
+        return $"{this.pieceColor} {this.pieceType} {this.squareInNotation} {this.squareToMoveInNotation}";
     }
 
 }

@@ -10,8 +10,8 @@ namespace ConsoleChess.Abstraction;
 /// </summary>
 public class Move {
 
-    private Piece movingPiece { get; set; }
-    private Piece capturedPiece { get; set; }
+    public Piece movingPiece { get; set; }
+    public Piece capturedPiece { get; set; }
     public bool isCapturing { get; set; }
     public bool isChecking { get; set; }
     public bool isCheckingMate { get; set; }
@@ -51,7 +51,7 @@ public class Move {
         // + - Check
 
         this.movingPiece = new Piece(inputChessNotation, pieceColor, board);
-        this.capturedPiece = new Piece(PieceType.Null, PieceColor.Null);
+        this.capturedPiece = new Piece(PieceType.Null, PieceColor.Null, "");
         this.isCapturing = movingPiece.isCapturing;
         this.isChecking = movingPiece.isChecking;
         this.isCheckingMate = movingPiece.isCheckingMate;
@@ -70,6 +70,11 @@ public class Move {
     /// <returns>This' movingPiece</returns>
     public Piece GetMovingPiece() {
         return this.movingPiece;
+    }
+
+    public override string ToString()
+    {
+        return $"{this.movingPiece} {this.capturedPiece} {this.isCapturing} {this.isChecking} {this.isCheckingMate} {this.isLegalMove}";
     }
 
 }

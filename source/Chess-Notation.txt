@@ -1,0 +1,20 @@
+Chess Notation or Algebraic Chess Notation is a way of writing moves on a chessboard, where the rows and columns of the board are as so:
+
+  A B C D E F G H
+8 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 8
+7 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 7
+6                 6
+5                 5
+4                 4
+3                 3
+2 ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 2
+1 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 1
+  A B C D E F G H
+
+For example, the move
+1. e4
+is written as
+pe2e4 in Algebraic Chess Notation (At least, that's how this program recognizes it.)
+
+If you wish to learn more, here's a wikipedia page about it: 
+https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#:~:text=figurine%20algebraic%20notation.-,Notation%20for%20moves,(knight%20moves%20to%20f3).
