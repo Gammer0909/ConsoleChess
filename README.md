@@ -23,7 +23,7 @@ dotnet run
 ```
 
 and when you want to exit the game, type `exit` when prompted:
-
+```
   A B C D E F G H
 8 ♖   ♗ ♕ ♔ ♗ ♘ ♖ 8
 7 ♙ ♙   ♙ ♙ ♙ ♙ ♙ 7
@@ -35,7 +35,7 @@ and when you want to exit the game, type `exit` when prompted:
 1 ♜ ♞ ♝ ♛ ♚ ♝   ♜ 1
   A B C D E F G H
 5. White > exit
-
+```
 ## Usage
 
 To use ConsoleChess, simply follow the on-screen instructions.
