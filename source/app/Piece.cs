@@ -5,15 +5,20 @@ using ConsoleChess.Enums;
 
 namespace ConsoleChess.Abstraction;
 
+/// <summary>
+/// Represents a chess piece
+/// </summary>
 public class Piece {
     public static Piece Null => new(PieceType.Null, PieceColor.Null);
     private PieceType pieceType { get; set; }
     private PieceColor pieceColor { get; set; }
-    private bool isCapturing { get; set; }
-    private bool isChecking { get; set; }
-    private bool isCheckingMate { get; set; }
-    private Piece? pieceToAttack { get; set; }
-    private bool isLegalMove = false;
+    public string squareInNotation { get; set; }
+    public string squareToMoveInNotation { get; set; }
+    public bool isCapturing { get; set; }
+    public bool isChecking { get; set; }
+    public bool isCheckingMate { get; set; }
+    private Piece pieceToAttack { get; set; }
+    private bool isLegalMove = true;
 
     /// <summary>
     /// Creates a new Piece object from a given PieceType and PieceColor
@@ -50,24 +55,32 @@ public class Piece {
             _ => throw new ArgumentException("Invalid chess notation")
         };
 
-        if (inputChessNotation.Length == 5) {
-            // Check if the piece is capturing by finding if 'x' is in the input
-            this.isCapturing = inputChessNotation[1] == 'x';
-            // Check if the piece is checking by finding if '+' is in the input
-            this.isChecking = inputChessNotation[4] == '+';
-            // Check if the piece is checking mate by finding if '#' is in the input
-            this.isCheckingMate = inputChessNotation[4] == '#';
+        if (inputChessNotation.Length == 7) {
+            // Check if the piece is capturing by finding if 'x' is in the input (Eg. Bd4**x**e5+)
+            this.isCapturing = inputChessNotation[4] == 'x';
+            // Check if the piece is checking by finding if '+' is in the input (Eg. Bd4xe5**+**)
+            this.isChecking = inputChessNotation[inputChessNotation.Length - 1] == '+';
+            // Check if the piece is checking mate by finding if '#' is in the input (Eg. Bd4xe5+**#**)
+            this.isCheckingMate = inputChessNotation[inputChessNotation.Length - 1] == '#';
 
             // Get the piece to attack by getting the last two characters of the input
             this.pieceToAttack = board.GetPiece(inputChessNotation[2..4]);
 
             // Im not sure how to check if it's a legal move so
             // TODO: Check for legal moves
-        
+
+            // Get the Piece that this is on
+            this.squareInNotation = inputChessNotation[1..2];
+
+            // Get the Piece that this is moving to
+            this.squareToMoveInNotation = inputChessNotation[5..6];
+
         }
 
     }
 
-
+    public Piece GetPieceToAttack() {
+        return this.pieceToAttack;
+    }
 
 }

@@ -4,6 +4,10 @@ using ConsoleChess.Graphics;
 using ConsoleChess.Enums;
 using ConsoleChess.Abstraction;
 
+// SINGLETONS, SINGLETONS, SINGLETONS!
+/// <summary>
+/// The chess board that the game is played on
+/// </summary>
 public class Board {
 
     public Board() {
@@ -99,6 +103,19 @@ public class Board {
 
         // Convert the input to a move
         Move move = new Move(input, isWhiteTurn ? PieceColor.White : PieceColor.Black, this);
+
+        // Check if the move is legal (It always will be because of my niaive lack of implementation)
+        if (!move.isLegalMove) {
+            Console.WriteLine("Illegal move");
+            this.Move();
+        }
+
+
+        // First, get the piece that is moving
+        Piece movingPiece = move.GetMovingPiece();
+
+        
+
     }
 
     /// <summary>

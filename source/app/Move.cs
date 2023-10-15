@@ -5,14 +5,17 @@ using ConsoleChess.Abstraction;
 
 namespace ConsoleChess.Abstraction;
 
+/// <summary>
+/// Represents a move in a game of chess
+/// </summary>
 public class Move {
 
     private Piece movingPiece { get; set; }
     private Piece capturedPiece { get; set; }
-    private bool isCapturing { get; set; }
-    private bool isChecking { get; set; }
-    private bool isCheckingMate { get; set; }
-    private bool isLegalMove { get; set; }
+    public bool isCapturing { get; set; }
+    public bool isChecking { get; set; }
+    public bool isCheckingMate { get; set; }
+    public bool isLegalMove { get; set; }
 
     /// <summary>
     /// Creates a new Move object by manually setting each property
@@ -32,14 +35,41 @@ public class Move {
         this.isLegalMove = isLegalMove;
     }
 
+    /// <summary>
+    /// Creates a new Move object from a given chess notation
+    /// </summary>
+    /// <param name="inputChessNotation">The algebraic chess notation of the move</param>
+    /// <param name="pieceColor">The color of the piece</param>
+    /// <param name="board">The board that the game is being played on</param>
     public Move(string inputChessNotation, PieceColor pieceColor, Board board) {
+
+        // Algebraic chess notation example
+        // Bd4xe5+
+        // B - Piece
+        // x - Capture
+        // e5 - Target square
+        // + - Check
+
         this.movingPiece = new Piece(inputChessNotation, pieceColor, board);
         this.capturedPiece = new Piece(PieceType.Null, PieceColor.Null);
-        this.isCapturing = inputChessNotation[1] == 'x';
-        this.isChecking = inputChessNotation[^1] == '+';
-        this.isCheckingMate = inputChessNotation[^1] == '#';
-        this.isLegalMove = false;
+        this.isCapturing = movingPiece.isCapturing;
+        this.isChecking = movingPiece.isChecking;
+        this.isCheckingMate = movingPiece.isCheckingMate;
+        this.isLegalMove = true;
+
+        if (this.isCapturing) {
+            this.capturedPiece = this.movingPiece.GetPieceToAttack();
+        }
+
+
     }
 
+    /// <summary>
+    /// Gets the piece that is moving
+    /// </summary>
+    /// <returns>This' movingPiece</returns>
+    public Piece GetMovingPiece() {
+        return this.movingPiece;
+    }
 
 }
