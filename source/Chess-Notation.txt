@@ -13,6 +13,7 @@ Chess Notation or Algebraic Chess Notation is a way of writing moves on a chessb
 
 For example, the move
 1. e4
+(Or the Pawn on e2 moves to e4)
 is written as
 pe2e4 in Algebraic Chess Notation (At least, that's how this program recognizes it.)
 
